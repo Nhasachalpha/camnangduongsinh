@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cẩm Nang Dưỡng Sinh & Liệu Pháp Chữa Bệnh - Bộ Sách Chăm Sóc Sức Khỏe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Styles */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fffefb;
+            color: #333;
+        }
+        .bg-gradient-header {
+             background: linear-gradient(135deg, #fffde7 0%, #fef9c3 100%);
+        }
+        .bg-gradient-section {
+             background: linear-gradient(135deg, #fffefb 0%, #fffde7 100%);
+        }
+        .book-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #4d8b31;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary:hover {
+            background-color: #3a6a25;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .btn-secondary {
+            background-color: #ffffff;
+            color: #4d8b31;
+            border: 1px solid #4d8b31;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #f0fdf4;
+            transform: translateY(-2px);
+        }
+        .feature-icon { color: #4d8b31; }
+        .combo-price-banner { background: linear-gradient(90deg, #4d8b31 0%, #8dc26f 100%); }
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+        .success-animation { animation: fadeInScale 0.5s ease-in-out; }
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .detail-slider-image { max-height: 350px; object-fit: contain; border-radius: 0.5rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .detail-content { display: none; }
+        .detail-content.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .detail-nav-button { background-color: rgba(77, 139, 49, 0.8); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.2rem; cursor: pointer; transition: background-color 0.3s ease; position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; }
+        .detail-nav-button:hover { background-color: rgba(58, 106, 37, 1); }
+        .detail-prev { left: 10px; }
+        .detail-next { right: 10px; }
+        @media (max-width: 768px) {
+            .detail-slider-container { flex-direction: column; }
+            .detail-slider-image-wrapper { margin-bottom: 1rem; width: 100%; }
+            .detail-slider-content-wrapper { width: 100%; }
+            .detail-slider-image { max-height: 250px; }
+        }
+        .text-custom-red { color: #d9534f; }
+        .bg-custom-red { background-color: #d9534f; }
+
+        /* Countdown Timer Styles */
+        .countdown-timer span {
+            background-color: rgba(77, 139, 49, 0.1); /* Light green background */
+            color: #3a6a25; /* Darker green text */
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+            margin: 0 0.15rem;
+        }
+
+        /* Recent Order Popup Styles */
+        #recent-order-popup {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            display: none; /* Hidden by default */
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+            transform: translateX(-150%); /* Start off-screen */
+            opacity: 0;
+            max-width: 300px;
+        }
+        #recent-order-popup.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        #recent-order-popup p {
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        #recent-order-popup .customer-name {
+            font-weight: 600;
+            color: #4d8b31; /* Green */
+        }
+         #recent-order-popup .time-ago {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 4px;
+            display: block;
+        }
+         #recent-order-popup .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 8px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #aaa;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+         }
+         #recent-order-popup .close-btn:hover {
+            color: #333;
+         }
+
+        /* Testimonial Image Styles */
+        .testimonial-img {
+            width: 50px; /* Adjust size as needed */
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover; /* Ensure image covers the circle */
+            border: 2px solid #4d8b31; /* Optional green border */
+            margin-right: 1rem; /* Space between image and text */
+        }
+
+    </style>
+</head>
+<body class="bg-white">
+    <header class="bg-gradient-header py-10 md:py-16 px-4">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div class="text-center md:text-left">
+                 <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-green-800">BỘ SÁCH CHĂM SÓC SỨC KHỎE TOÀN DIỆN</h1>
+                 <h2 class="text-xl sm:text-2xl lg:text-3xl font-semibold mb-6 text-green-700">Cẩm Nang Dưỡng Sinh & Liệu Pháp Chữa Bệnh</h2>
+                 <p class="text-base md:text-lg text-gray-700 mb-6">Giải mã bí ẩn về cơ thể và phương pháp chữa bệnh tự nhiên, an toàn, hiệu quả ngay tại nhà.</p>
+                 <div class="mb-6 text-center md:text-left">
+                     <p class="text-lg font-semibold text-custom-red mb-2">🔥 Ưu đãi kết thúc sau:</p>
+                     <div id="countdown-timer" class="countdown-timer text-xl md:text-2xl">
+                         <span>00</span>:<span>00</span>:<span>00</span>:<span>00</span>
+                     </div>
+                 </div>
+                 <div class="flex justify-center md:justify-start space-x-4">
+                     <a href="#order-now" class="btn-primary text-base md:text-lg font-bold py-3 px-6 md:px-8 rounded-full">ĐẶT MUA NGAY</a>
+                     <a href="#explore-books" class="btn-secondary text-base md:text-lg font-bold py-3 px-6 md:px-8 rounded-full">KHÁM PHÁ SÁCH</a>
+                 </div>
+            </div>
+            <div class="relative text-center">
+                 <img src="https://placehold.co/600x450/fffde7/4d8b31?text=Combo+2+S%C3%A1ch" alt="Combo 2 cuốn sách sức khỏe" class="rounded-lg shadow-xl mx-auto w-full max-w-md lg:max-w-lg" onerror="this.onerror=null; this.src='https://placehold.co/600x450/e0e0e0/757575?text=Image+Not+Found';">
+                <div class="absolute top-4 right-4 md:-top-5 md:-right-5 bg-custom-red text-white font-bold py-2 px-4 rounded-full transform rotate-12 shadow-lg animate-pulse">
+                    <p class="text-sm md:text-base">GIẢM SỐC!</p>
+                    <p class="text-xs md:text-sm">Chỉ 299K + FS</p>
+                </div>
+                 <style> @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } } .float-animation { animation: float 3s ease-in-out infinite; } </style>
+                 <script> // document.querySelector('.relative.text-center img').classList.add('float-animation'); </script>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-16 px-4 bg-gradient-section">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-12 text-green-800">TẠI SAO NÊN SỞ HỮU BỘ SÁCH NÀY?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md text-center transition duration-300 hover:shadow-xl"> <div class="text-5xl feature-icon mb-4 inline-block"> <i class="fas fa-book-medical"></i> </div> <h3 class="text-xl font-bold mb-3 text-green-700">Kiến Thức Y Học Cổ Truyền</h3> <p class="text-gray-700">Tiếp cận kho tàng tri thức phương Đông về chăm sóc sức khỏe một cách khoa học, dễ hiểu và ứng dụng.</p> </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center transition duration-300 hover:shadow-xl"> <div class="text-5xl feature-icon mb-4 inline-block"> <i class="fas fa-heartbeat"></i> </div> <h3 class="text-xl font-bold mb-3 text-green-700">Phòng Bệnh & Chữa Bệnh</h3> <p class="text-gray-700">Hướng dẫn chi tiết các phương pháp dưỡng sinh và chữa lành từ tự nhiên, an toàn và hiệu quả.</p> </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center transition duration-300 hover:shadow-xl"> <div class="text-5xl feature-icon mb-4 inline-block"> <i class="fas fa-hand-holding-medical"></i> </div> <h3 class="text-xl font-bold mb-3 text-green-700">Tự Chữa Lành Tại Nhà</h3> <p class="text-gray-700">Nắm được các kỹ thuật điều trị đơn giản tại nhà mà không cần dùng thuốc, phù hợp cho mọi lứa tuổi.</p> </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="explore-books" class="py-16 px-4 bg-white">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-12 text-green-800">KHÁM PHÁ BỘ SÁCH QUÝ BÁU</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <div class="book-card bg-gray-50 p-6 rounded-lg shadow-lg flex flex-col"> <img src="https://placehold.co/300x400/fffde7/4d8b31?text=S%C3%A1ch+1" alt="Cẩm nang dưỡng sinh thông kinh lạc" class="rounded-md shadow-md mx-auto mb-4 w-full max-w-[250px]" onerror="this.onerror=null; this.src='https://placehold.co/300x400/e0e0e0/757575?text=Image+Not+Found';"> <h3 class="text-xl font-bold mb-2 text-green-700 text-center">Cẩm Nang Dưỡng Sinh Thông Kinh Lạc</h3> <div class="text-center mb-3"> <span class="text-lg line-through text-gray-500 mr-2">298.000đ</span> <span class="text-2xl font-bold text-custom-red">199.000đ</span> </div> <p class="text-gray-700 mb-4 text-sm flex-grow">Hiểu rõ hệ thống kinh lạc, các huyệt đạo và phương pháp dưỡng sinh, ấn huyệt để phòng và chữa bệnh hiệu quả.</p> <div class="mt-auto flex flex-col sm:flex-row justify-center gap-3"> <a href="#book1-details" class="btn-secondary text-center py-2 px-4 rounded-full text-sm font-medium">Xem Thêm Nội Dung</a> <a href="#order-now" class="btn-primary text-center py-2 px-4 rounded-full text-sm font-medium">Đặt Hàng Ngay</a> </div> </div>
+                <div class="book-card bg-gray-50 p-6 rounded-lg shadow-lg flex flex-col"> <img src="https://placehold.co/300x400/f0f9ff/0c4a6e?text=S%C3%A1ch+2" alt="Liệu pháp chữa bệnh khu phản xạ" class="rounded-md shadow-md mx-auto mb-4 w-full max-w-[250px]" onerror="this.onerror=null; this.src='https://placehold.co/300x400/e0e0e0/757575?text=Image+Not+Found';"> <h3 class="text-xl font-bold mb-2 text-green-700 text-center">Liệu Pháp Chữa Bệnh Khu Phản Xạ</h3> <div class="text-center mb-3"> <span class="text-lg line-through text-gray-500 mr-2">350.000đ</span> <span class="text-2xl font-bold text-custom-red">179.000đ</span> </div> <p class="text-gray-700 mb-4 text-sm flex-grow">Khám phá bản đồ các điểm phản xạ trên cơ thể và học cách bấm huyệt để điều trị nhiều loại bệnh tật thông thường.</p> <div class="mt-auto flex flex-col sm:flex-row justify-center gap-3"> <a href="#book2-details" class="btn-secondary text-center py-2 px-4 rounded-full text-sm font-medium">Xem Thêm Nội Dung</a> <a href="#order-now" class="btn-primary text-center py-2 px-4 rounded-full text-sm font-medium">Đặt Hàng Ngay</a> </div> </div>
+                <div class="book-card bg-yellow-50 p-6 rounded-lg shadow-lg border-2 border-yellow-400 flex flex-col"> <img src="https://placehold.co/300x400/fffde7/4d8b31?text=Combo+2+S%C3%A1ch" alt="Combo 2 cuốn sách sức khỏe" class="rounded-md shadow-md mx-auto mb-4 w-full max-w-[250px]" onerror="this.onerror=null; this.src='https://placehold.co/300x400/e0e0e0/757575?text=Image+Not+Found';"> <h3 class="text-xl font-bold mb-2 text-green-700 text-center">COMBO 2 CUỐN ƯU ĐÃI</h3> <div class="text-center mb-3 combo-price-banner text-white p-3 rounded-lg"> <p class="text-sm line-through">Giá gốc: 648.000đ</p> <p class="text-2xl font-bold">CHỈ CÒN <span class="text-yellow-300">299.000đ</span></p> <p class="text-sm font-semibold mt-1">🚚 MIỄN PHÍ VẬN CHUYỂN</p> </div> <p class="text-gray-700 mb-4 text-sm flex-grow">Sở hữu trọn bộ kiến thức chăm sóc sức khỏe toàn diện với giá siêu tiết kiệm và được miễn phí giao hàng.</p> <div class="mt-auto flex flex-col sm:flex-row justify-center gap-3"> <a href="#order-now" class="btn-primary w-full text-center py-3 px-4 rounded-full text-base font-bold">ĐẶT COMBO NGAY</a> </div> </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 px-4 bg-gradient-section">
+        <div class="container mx-auto space-y-16">
+            <div id="book1-details" class="bg-white p-6 md:p-8 rounded-xl shadow-lg scroll-mt-20"> <h2 class="text-2xl md:text-3xl font-bold mb-8 text-green-800 text-center">Chi Tiết: Cẩm Nang Dưỡng Sinh Thông Kinh Lạc</h2> <div class="flex flex-col md:flex-row items-center gap-6 md:gap-10 detail-slider-container"> <div class="w-full md:w-1/2 relative detail-slider-image-wrapper"> <img id="book1-image" src="https://placehold.co/500x350/fffde7/166534?text=S%C3%A1ch+1+-+Ảnh+1" alt="Ảnh chi tiết sách 1" class="detail-slider-image w-full" onerror="this.onerror=null; this.src='https://placehold.co/500x350/e0e0e0/757575?text=Image+Not+Found';"> <button class="detail-nav-button detail-prev" onclick="changeDetailSlide('book1', -1)"><i class="fas fa-chevron-left"></i></button> <button class="detail-nav-button detail-next" onclick="changeDetailSlide('book1', 1)"><i class="fas fa-chevron-right"></i></button> </div> <div class="w-full md:w-1/2 detail-slider-content-wrapper"> <div id="book1-content-0" class="detail-content active"> <h4 class="text-xl font-semibold mb-3 text-green-700">Tổng Quan Hệ Thống Kinh Lạc</h4> <p class="text-gray-700 mb-2">Giới thiệu 12 đường kinh chính và 8 mạch kỳ kinh, vai trò của chúng trong việc duy trì sức khỏe và cân bằng năng lượng cơ thể.</p> <ul class="list-disc list-inside text-gray-600 space-y-1 text-sm"> <li>Sơ đồ chi tiết, dễ hình dung.</li> <li>Giải thích mối liên hệ giữa kinh lạc và các cơ quan nội tạng.</li> <li>Nguyên nhân gây tắc nghẽn kinh lạc.</li> </ul> </div> <div id="book1-content-1" class="detail-content"> <h4 class="text-xl font-semibold mb-3 text-green-700">Huyệt Đạo Quan Trọng</h4> <p class="text-gray-700 mb-2">Trình bày vị trí, công dụng và cách xác định các huyệt đạo thường dùng để phòng và chữa các bệnh thông thường.</p> <ul class="list-disc list-inside text-gray-600 space-y-1 text-sm"> <li>Hình ảnh minh họa rõ ràng vị trí huyệt.</li> <li>Hướng dẫn kỹ thuật bấm huyệt đúng cách (lực, thời gian).</li> <li>Ứng dụng cho đau đầu, mất ngủ, đau vai gáy...</li> </ul> </div> <div id="book1-content-2" class="detail-content"> <h4 class="text-xl font-semibold mb-3 text-green-700">Phương Pháp Dưỡng Sinh Đông Y</h4> <p class="text-gray-700 mb-2">Các nguyên tắc dưỡng sinh cốt lõi theo y học cổ truyền: điều hòa âm dương, thuận theo tự nhiên, ăn uống, nghỉ ngơi hợp lý.</p> <ul class="list-disc list-inside text-gray-600 space-y-1 text-sm"> <li>Dưỡng sinh theo mùa.</li> <li>Lựa chọn thực phẩm tốt cho kinh lạc.</li> <li>Tầm quan trọng của giấc ngủ và tinh thần.</li> </ul> </div> <div id="book1-content-3" class="detail-content"> <h4 class="text-xl font-semibold mb-3 text-green-700">Bài Tập Thông Kinh Lạc</h4> <p class="text-gray-700 mb-2">Hướng dẫn các bài tập khí công, yoga, vỗ kinh lạc đơn giản, dễ thực hiện tại nhà giúp lưu thông khí huyết.</p> <ul class="list-disc list-inside text-gray-600 space-y-1 text-sm"> <li>Bài tập cho buổi sáng và buổi tối.</li> <li>Bài tập chuyên biệt cho từng đường kinh.</li> <li>Lưu ý khi tập luyện để đạt hiệu quả cao nhất.</li> </ul> </div> <div id="book1-content-4" class="detail-content"> <h4 class="text-xl font-semibold mb-3 text-green-700">Ứng Dụng Chữa Bệnh</h4> <p class="text-gray-700 mb-2">Phác đồ cụ thể kết hợp ấn huyệt và bài tập để hỗ trợ điều trị các bệnh như cảm cúm, ho, rối loạn tiêu hóa, đau khớp...</p> <ul class="list-disc list-inside text-gray-600 space-y-1 text-sm"> <li>Hướng dẫn từng bước cho mỗi loại bệnh.</li> <li>Kết hợp với chế độ ăn uống phù hợp.</li> <li>Khi nào cần tìm đến chuyên gia y tế.</li> </ul> </div> </div> </div> <div class="text-center mt-8"> <a href="#order-now" class="btn-primary text-lg font-bold py-3 px-8 rounded-full">Đặt Mua Sách Này</a> </div> </div>
+            <div id="book2-details" class="bg-white p-6 md:p-8 rounded-xl shadow-lg scroll-mt-20"> <h2 class="text-2xl md:text-3xl font-bold mb-8 text-green-800 text-center">Chi Tiết: Liệu Pháp Chữa Bệnh Khu Phản Xạ</h2> <div class="flex flex-col md:flex-row items-center gap-6 md:gap-10 detail-slider-container"> <div class="w-full md:w-1/2 relative detail-slider-image-wrapper"> <img id="book2-image" src="https://placehold.co/500x350/f0f9ff/0c4a6e?text=S%C3%A1ch+2+-+Ảnh+1" alt="Ảnh chi tiết sách 2" class="detail-slider-image w-full" onerror="this.onerror=null; this.src='https://placehold.co/500x350/e0e0e0/757575?text=Image+Not+Found';"> <button class="detail-nav-button detail-prev" onclick="changeDetailSlide('book2', -1)"><i class="fas fa-chevron-left"></i></button> <button class="detail-nav-button detail-next" onclick="changeDetailSlide('book2', 1)"><i class="fas fa-chevron-right"></i></button> </div> <div class="w-full md:w-1/2 detail-slider-content-wrapper"> <div id="book2-content-0" class="detail-content active"> <h4 class="text-xl font-semibold mb-3 text-green-700">Lý Thuyết Khu Phản Xạ</h4> <p class="text-gray-700 mb-2">Giải thích cơ chế hoạt động của liệu pháp phản xạ học: mối liên hệ thần kinh giữa các vùng trên bàn chân, bàn tay, tai với các cơ quan trong cơ thể.</p> <ul class="list-disc list-inside text-gray-600 space-y-1 text-sm"> <li>Lịch sử và nguồn gốc của phương pháp.</li> <li>Nguyên lý "cơ thể thu nhỏ" tại các khu phản xạ.</li> <li>Lợi ích của việc tác động vào khu phản xạ.</li> </ul> </div> <div id="book2-content-1" class="detail-content"> <h4 class="text-xl font-semibold mb-3 text-green-700">Bản Đồ Phản Xạ Bàn Chân</h4> <p class="text-gray-700 mb-2">Sơ đồ chi tiết, rõ ràng các vùng phản xạ tương ứng với từng bộ phận, cơ quan trên lòng bàn chân, mu bàn chân và cạnh chân.</p> <ul class="list-disc list-inside text-gray-600 space-y-1 text-sm"> <li>Hình ảnh màu sắc, dễ nhận biết.</li> <li>Phân chia theo hệ cơ quan (tiêu hóa, hô hấp, thần kinh...).</li> <li>Cách dò tìm điểm đau tương ứng với bệnh.</li> </ul> </div> <div id="book2-content-2" class="detail-content"> <h4 class="text-xl font-semibold mb-3 text-green-700">Phản Xạ Bàn Tay & Tai</h4> <p class="text-gray-700 mb-2">Mở rộng bản đồ phản xạ sang khu vực bàn tay và loa tai, cung cấp thêm các lựa chọn tác động hiệu quả.</p> <ul class="list-disc list-inside text-gray-600 space-y-1 text-sm"> <li>Ưu điểm của việc tác động lên tay và tai.</li> <li>Sơ đồ chi tiết cho bàn tay và loa tai.</li> <li>Kết hợp phản xạ chân, tay, tai để tăng hiệu quả.</li> </ul> </div> <div id="book2-content-3" class="detail-content"> <h4 class="text-xl font-semibold mb-3 text-green-700">Kỹ Thuật Day Ấn Chuyên Sâu</h4> <p class="text-gray-700 mb-2">Hướng dẫn các kỹ thuật day, ấn, miết, vê... đúng cách, phù hợp với từng vùng phản xạ và mục đích trị liệu.</p> <ul class="list-disc list-inside text-gray-600 space-y-1 text-sm"> <li>Sử dụng ngón tay, khớp tay hoặc dụng cụ hỗ trợ.</li> <li>Điều chỉnh lực đạo phù hợp với cảm nhận.</li> <li>Thời gian tác động cho mỗi huyệt/vùng.</li> </ul> </div> <div id="book2-content-4" class="detail-content"> <h4 class="text-xl font-semibold mb-3 text-green-700">Điều Trị Bệnh Phổ Biến</h4> <p class="text-gray-700 mb-2">Phác đồ chi tiết cho việc điều trị các bệnh như: đau đầu, mất ngủ, cao huyết áp, tiểu đường, bệnh về tiêu hóa, hô hấp, xương khớp...</p> <ul class="list-disc list-inside text-gray-600 space-y-1 text-sm"> <li>Xác định vùng phản xạ cần tác động cho từng bệnh.</li> <li>Liệu trình thực hiện (số lần/ngày, thời gian).</li> <li>Kết hợp massage thư giãn và ngâm chân thảo dược.</li> </ul> </div> </div> </div> <div class="text-center mt-8"> <a href="#order-now" class="btn-primary text-lg font-bold py-3 px-8 rounded-full">Đặt Mua Sách Này</a> </div> </div>
+        </div>
+    </section>
+
+    <section class="py-16 px-4 bg-white">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-12 text-green-800">KHÁCH HÀNG NÓI GÌ VỀ BỘ SÁCH</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md border-l-4 border-yellow-400">
+                    <div class="flex mb-4 text-yellow-400"> <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> </div>
+                    <p class="italic text-gray-700 mb-4">"Tôi đã áp dụng các bài tập thông kinh lạc trong sách và thấy đau lưng giảm hẳn chỉ sau 2 tuần. Sách hướng dẫn rất chi tiết và dễ hiểu!"</p>
+                    <div class="flex items-center">
+                        <img src="https://placehold.co/50x50/a7f3d0/166534?text=M" alt="Ảnh khách hàng Nguyễn Thị Minh" class="testimonial-img" onerror="this.onerror=null; this.src='https://placehold.co/50x50/e0e0e0/757575?text=M';">
+                        <div>
+                            <p class="font-medium text-green-800">Nguyễn Thị Minh</p>
+                            <p class="text-sm text-gray-600">55 tuổi, Hà Nội</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md border-l-4 border-yellow-400">
+                    <div class="flex mb-4 text-yellow-400"> <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> </div>
+                    <p class="italic text-gray-700 mb-4">"Cuốn Liệu pháp chữa bệnh khu phản xạ đã giúp tôi điều trị được chứng đau đầu mãn tính mà trước đây tôi phải dùng thuốc. Tôi rất biết ơn tác giả!"</p>
+                    <div class="flex items-center">
+                         <img src="https://placehold.co/50x50/bfdbfe/1e40af?text=B" alt="Ảnh khách hàng Trần Thanh Bình" class="testimonial-img" onerror="this.onerror=null; this.src='https://placehold.co/50x50/e0e0e0/757575?text=B';">
+                        <div>
+                            <p class="font-medium text-green-800">Trần Thanh Bình</p>
+                            <p class="text-sm text-gray-600">42 tuổi, TP.HCM</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md border-l-4 border-yellow-400">
+                    <div class="flex mb-4 text-yellow-400"> <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> </div>
+                    <p class="italic text-gray-700 mb-4">"Mua combo 2 cuốn thật sự rất xứng đáng. Hình ảnh minh họa đẹp, nội dung dễ hiểu. Tôi đã chia sẻ cho cả gia đình cùng thực hành và mọi người đều thấy có hiệu quả."</p>
+                    <div class="flex items-center">
+                         <img src="https://placehold.co/50x50/fde047/166534?text=N" alt="Ảnh khách hàng Lê Hoài Nam" class="testimonial-img" onerror="this.onerror=null; this.src='https://placehold.co/50x50/e0e0e0/757575?text=N';">
+                        <div>
+                            <p class="font-medium text-green-800">Lê Hoài Nam</p>
+                            <p class="text-sm text-gray-600">38 tuổi, Đà Nẵng</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="order-now" class="py-16 px-4 bg-gradient-section scroll-mt-20">
+        <div class="container mx-auto">
+            <div class="bg-white p-6 md:p-8 rounded-xl shadow-xl max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-8 text-green-800">ĐẶT MUA NGAY - NHẬN ƯU ĐÃI</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div> <h3 class="text-xl font-semibold mb-4 text-green-700">Chọn sản phẩm:</h3> <div class="space-y-4 mb-6"> <div class="flex items-center border border-gray-200 p-3 rounded-lg hover:bg-gray-50 transition duration-200"> <input type="radio" id="product1" name="product" value="Cẩm nang dưỡng sinh thông kinh lạc - 199.000đ" class="mr-3 h-5 w-5 accent-green-600 flex-shrink-0"> <label for="product1" class="flex-1 cursor-pointer"> <p class="font-medium">Cẩm nang dưỡng sinh thông kinh lạc</p> <p class="text-custom-red font-bold">199.000đ <span class="text-sm text-gray-500 line-through ml-1">298.000đ</span></p> </label> </div> <div class="flex items-center border border-gray-200 p-3 rounded-lg hover:bg-gray-50 transition duration-200"> <input type="radio" id="product2" name="product" value="Liệu pháp chữa bệnh khu phản xạ - 179.000đ" class="mr-3 h-5 w-5 accent-green-600 flex-shrink-0"> <label for="product2" class="flex-1 cursor-pointer"> <p class="font-medium">Liệu pháp chữa bệnh khu phản xạ</p> <p class="text-custom-red font-bold">179.000đ <span class="text-sm text-gray-500 line-through ml-1">350.000đ</span></p> </label> </div> <div class="flex items-center border-2 border-yellow-500 p-3 rounded-lg bg-yellow-50 transition duration-200"> <input type="radio" id="combo" name="product" value="Combo 2 cuốn: Cẩm nang dưỡng sinh & Liệu pháp chữa bệnh - 299.000đ (Miễn phí vận chuyển)" class="mr-3 h-5 w-5 accent-green-600 flex-shrink-0" checked> <label for="combo" class="flex-1 cursor-pointer"> <p class="font-medium">Combo 2 cuốn sách (Ưu đãi tốt nhất)</p> <p class="text-custom-red font-bold">299.000đ <span class="text-green-600 ml-2 text-sm">🚚 Miễn phí vận chuyển</span></p> <p class="text-sm text-gray-600">(Tiết kiệm: 79.000đ + Phí Ship)</p> </label> </div> </div> <h3 class="text-xl font-semibold mb-3 mt-6 text-green-700">Cam kết:</h3> <ul class="space-y-2 text-gray-700 text-sm"> <li class="flex items-start"><i class="fas fa-check-circle text-green-600 mt-1 mr-2 flex-shrink-0"></i><span>Sách in màu, bìa cứng, chất lượng cao, nội dung chuẩn y học.</span></li> <li class="flex items-start"><i class="fas fa-truck text-green-600 mt-1 mr-2 flex-shrink-0"></i><span>Giao hàng nhanh toàn quốc (2-5 ngày).</span></li> <li class="flex items-start"><i class="fas fa-hand-holding-usd text-green-600 mt-1 mr-2 flex-shrink-0"></i><span>Kiểm tra hàng thoải mái trước khi thanh toán (COD).</span></li> <li class="flex items-start"><i class="fas fa-sync-alt text-green-600 mt-1 mr-2 flex-shrink-0"></i><span>Đổi trả miễn phí trong 7 ngày nếu có lỗi từ nhà sản xuất.</span></li> </ul> </div>
+                    <div> <h3 class="text-xl font-semibold mb-4 text-green-700">Thông tin nhận hàng:</h3> <form id="orderForm"> <input type="hidden" id="orderDate" name="date"> <div class="mb-4"> <label for="fullName" class="block mb-1 font-medium text-sm">Họ và tên <span class="text-red-500">*</span></label> <input type="text" id="fullName" name="name" placeholder="Nhập họ tên của bạn" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm" required> </div> <div class="mb-4"> <label for="phone" class="block mb-1 font-medium text-sm">Số điện thoại <span class="text-red-500">*</span></label> <input type="tel" id="phone" name="phone" placeholder="Nhập số điện thoại nhận hàng" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm" required> </div> <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4"> <div> <label for="city" class="block mb-1 font-medium text-sm">Tỉnh/Thành phố <span class="text-red-500">*</span></label> <select id="city" name="city" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm bg-white" required> <option value="">Chọn Tỉnh/Thành</option> </select> </div> <div> <label for="district" class="block mb-1 font-medium text-sm">Quận/Huyện <span class="text-red-500">*</span></label> <select id="district" name="district" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm bg-white" required> <option value="">Chọn Quận/Huyện</option> </select> </div> <div> <label for="ward" class="block mb-1 font-medium text-sm">Phường/Xã <span class="text-red-500">*</span></label> <select id="ward" name="ward" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm bg-white" required> <option value="">Chọn Phường/Xã</option> </select> </div> </div> <div class="mb-4"> <label for="addressDetail" class="block mb-1 font-medium text-sm">Địa chỉ chi tiết <span class="text-red-500">*</span></label> <input type="text" id="addressDetail" name="addressDetail" placeholder="Số nhà, tên đường, thôn/xóm..." class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm" required> </div> <div class="mb-6"> <label for="note" class="block mb-1 font-medium text-sm">Ghi chú (Tùy chọn)</label> <textarea id="note" name="note" rows="2" placeholder="Ví dụ: Giao hàng giờ hành chính..." class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm"></textarea> </div> <button type="submit" id="submitOrder" class="w-full btn-primary text-lg font-bold py-3 px-6 rounded-lg shadow-md flex items-center justify-center"> <i class="fas fa-shopping-cart mr-2"></i> ĐẶT HÀNG NGAY </button> </form> </div>
+                </div>
+                <div id="successMessage" class="mt-6 p-4 bg-green-100 border border-green-400 text-green-800 rounded-lg hidden success-animation"> <h3 class="text-xl font-bold mb-2"><i class="fas fa-check-circle mr-2"></i>Đặt hàng thành công!</h3> <p class="mb-2 text-sm">Cảm ơn bạn đã tin tưởng đặt hàng. Chúng tôi sẽ liên hệ với bạn qua số điện thoại đã cung cấp trong vòng 24 giờ làm việc để xác nhận đơn hàng và thông tin giao hàng.</p> <p class="text-sm">Mọi thắc mắc vui lòng liên hệ hotline: <span class="font-bold">0987.654.321</span></p> </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-green-900 text-gray-300 py-10 px-4">
+        <div class="container mx-auto"> <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8"> <div> <h3 class="text-xl font-bold mb-4 text-white">LIÊN HỆ</h3> <ul class="space-y-2 text-sm"> <li class="flex items-start"><i class="fas fa-phone-alt mt-1 mr-3 text-yellow-300"></i><span>Hotline: <a href="tel:0987654321" class="hover:text-white">0987.654.321</a> (Hỗ trợ 24/7)</span></li> <li class="flex items-start"><i class="fas fa-envelope mt-1 mr-3 text-yellow-300"></i><span>Email: <a href="mailto:hotro@sachsuckhoe.vn" class="hover:text-white">hotro@sachsuckhoe.vn</a></span></li> <li class="flex items-start"><i class="fas fa-map-marker-alt mt-1 mr-3 text-yellow-300"></i><span>Địa chỉ: 123 Đường Khỏe Mạnh, P. Bến Nghé, Q.1, TP.HCM</span></li> <li class="flex items-start"><i class="fas fa-clock mt-1 mr-3 text-yellow-300"></i><span>Giờ làm việc: 8h00 - 20h00 (T2 - CN)</span></li> </ul> </div> <div> <h3 class="text-xl font-bold mb-4 text-white">CHÍNH SÁCH</h3> <ul class="space-y-2 text-sm"> <li><a href="#" class="hover:text-white">Chính sách vận chuyển & giao nhận</a></li> <li><a href="#" class="hover:text-white">Chính sách đổi trả & hoàn tiền</a></li> <li><a href="#" class="hover:text-white">Hình thức thanh toán (COD)</a></li> <li><a href="#" class="hover:text-white">Chính sách bảo mật thông tin khách hàng</a></li> <li><a href="#" class="hover:text-white">Câu hỏi thường gặp (FAQ)</a></li> </ul> </div> <div> <h3 class="text-xl font-bold mb-4 text-white">KẾT NỐI VỚI CHÚNG TÔI</h3> <div class="flex space-x-4 mb-4"> <a href="#" aria-label="Facebook" class="text-2xl hover:text-white"><i class="fab fa-facebook-square"></i></a> <a href="#" aria-label="Youtube" class="text-2xl hover:text-white"><i class="fab fa-youtube"></i></a> <a href="#" aria-label="Instagram" class="text-2xl hover:text-white"><i class="fab fa-instagram"></i></a> <a href="#" aria-label="Tiktok" class="text-2xl hover:text-white"><i class="fab fa-tiktok"></i></a> </div> <p class="text-sm mb-2">Đăng ký nhận tin khuyến mãi:</p> <form class="flex"> <input type="email" placeholder="Nhập email của bạn" class="px-3 py-2 text-gray-800 rounded-l-md focus:outline-none w-full text-sm" required> <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-green-900 px-4 py-2 rounded-r-md text-sm font-medium">Đăng ký</button> </form> </div> </div> <div class="border-t border-green-700 pt-6 text-center text-sm"> <p>&copy; 2024 Bộ Sách Chăm Sóc Sức Khỏe. Phát triển bởi [Tên đơn vị/cá nhân].</p> <p>Nội dung trang web chỉ mang tính tham khảo, không thay thế cho chẩn đoán và điều trị của chuyên gia y tế.</p> </div> </div>
+    </footer>
+
+    <div id="recent-order-popup">
+        <button class="close-btn" onclick="closePopup()">&times;</button>
+        <p><i class="fas fa-check-circle text-green-500 mr-1"></i> <span id="popup-customer-name" class="customer-name">Ai đó</span> ở <span id="popup-location">đâu đó</span> vừa đặt mua <span id="popup-product">Combo 2 cuốn sách</span>.</p>
+        <span id="popup-time" class="time-ago">vài giây trước</span>
+    </div>
+
+    <script>
+        // --- Book Detail Slider Logic ---
+        const bookDetails = {
+            book1: { currentIndex: 0, totalSlides: 5, images: ["https://placehold.co/500x350/fffde7/166534?text=S%C3%A1ch+1+-+Ảnh+1", "https://placehold.co/500x350/fef9c3/166534?text=S%C3%A1ch+1+-+Ảnh+2", "https://placehold.co/500x350/fef08a/166534?text=S%C3%A1ch+1+-+Ảnh+3", "https://placehold.co/500x350/fde047/166534?text=S%C3%A1ch+1+-+Ảnh+4", "https://placehold.co/500x350/facc15/166534?text=S%C3%A1ch+1+-+Ảnh+5"] },
+            book2: { currentIndex: 0, totalSlides: 5, images: ["https://placehold.co/500x350/f0f9ff/0c4a6e?text=S%C3%A1ch+2+-+Ảnh+1", "https://placehold.co/500x350/e0f2fe/0c4a6e?text=S%C3%A1ch+2+-+Ảnh+2", "https://placehold.co/500x350/bae6fd/0c4a6e?text=S%C3%A1ch+2+-+Ảnh+3", "https://placehold.co/500x350/7dd3fc/0c4a6e?text=S%C3%A1ch+2+-+Ảnh+4", "https://placehold.co/500x350/38bdf8/0c4a6e?text=S%C3%A1ch+2+-+Ảnh+5"] }
+        };
+        function showDetailSlide(bookId, index) { const details = bookDetails[bookId]; if (!details) return; details.currentIndex = (index + details.totalSlides) % details.totalSlides; const imgElement = document.getElementById(`${bookId}-image`); if(imgElement) { imgElement.src = details.images[details.currentIndex]; imgElement.alt = `Ảnh chi tiết ${bookId === 'book1' ? 'sách 1' : 'sách 2'} - ${details.currentIndex + 1}`; } const contentElements = document.querySelectorAll(`[id^="${bookId}-content-"]`); contentElements.forEach(el => el.classList.remove('active')); const currentContent = document.getElementById(`${bookId}-content-${details.currentIndex}`); if (currentContent) { currentContent.classList.add('active'); } }
+        function changeDetailSlide(bookId, direction) { const details = bookDetails[bookId]; if (!details) return; showDetailSlide(bookId, details.currentIndex + direction); }
+
+        // --- Countdown Timer Logic ---
+        function startCountdown(duration, displayElement) {
+            let timer = duration, days, hours, minutes, seconds;
+            const interval = setInterval(function () {
+                days = parseInt(timer / (60 * 60 * 24), 10);
+                hours = parseInt((timer % (60 * 60 * 24)) / (60 * 60), 10);
+                minutes = parseInt((timer % (60 * 60)) / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                days = days < 10 ? "0" + days : days;
+                hours = hours < 10 ? "0" + hours : hours;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                displayElement.innerHTML = `<span>${days}</span>:<span>${hours}</span>:<span>${minutes}</span>:<span>${seconds}</span>`;
+
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    displayElement.innerHTML = "<span class='text-custom-red'>KHUYẾN MÃI ĐÃ KẾT THÚC!</span>";
+                }
+            }, 1000);
+        }
+
+        // --- Recent Order Popup Logic ---
+        const popupElement = document.getElementById('recent-order-popup');
+        const popupCustomerName = document.getElementById('popup-customer-name');
+        const popupLocation = document.getElementById('popup-location');
+        const popupProduct = document.getElementById('popup-product');
+        const popupTime = document.getElementById('popup-time');
+        let popupTimeout; // To store the timeout ID for hiding the popup
+
+        const customerNames = ["Nguyễn V. An", "Trần T. Bình", "Lê H. Cường", "Phạm T. Dung", "Hoàng V. Em", "Vũ T. Giang", "Đỗ H. Hùng", "Bùi T. Ian", "Hồ V. Kiên", "Ngô T. Lan"];
+        const locations = ["Hà Nội", "TP. HCM", "Đà Nẵng", "Hải Phòng", "Cần Thơ", "Nha Trang", "Huế", "Biên Hòa", "Vũng Tàu", "Bình Dương"];
+        const products = ["Combo 2 cuốn", "Sách Dưỡng Sinh", "Sách Khu Phản Xạ"];
+
+        function showRecentOrderPopup() {
+             if (!popupElement) return; // Exit if popup element doesn't exist
+
+             // Clear any existing hide timeout
+             if (popupTimeout) clearTimeout(popupTimeout);
+
+            // Randomize data
+            const randomName = customerNames[Math.floor(Math.random() * customerNames.length)];
+            const randomLocation = locations[Math.floor(Math.random() * locations.length)];
+            const randomProduct = products[Math.floor(Math.random() * products.length)];
+            const randomMinutes = Math.floor(Math.random() * 10) + 1; // 1 to 10 minutes ago
+
+            // Update popup content
+            if(popupCustomerName) popupCustomerName.textContent = randomName;
+            if(popupLocation) popupLocation.textContent = randomLocation;
+            if(popupProduct) popupProduct.textContent = randomProduct;
+             if(popupTime) popupTime.textContent = `${randomMinutes} phút trước`;
+
+            // Show popup
+            popupElement.classList.add('show');
+
+            // Set timeout to hide the popup after ~6 seconds
+            popupTimeout = setTimeout(() => {
+                popupElement.classList.remove('show');
+            }, 6000);
+        }
+
+         // Function to close the popup manually
+         function closePopup() {
+             if (popupTimeout) clearTimeout(popupTimeout); // Clear scheduled hide
+             if (popupElement) popupElement.classList.remove('show');
+         }
+
+        // --- Address Data Fetching and Population ---
+        const citySelect = document.getElementById('city');
+        const districtSelect = document.getElementById('district');
+        const wardSelect = document.getElementById('ward');
+        let addressData = [];
+        async function fetchAddressData() { const apiUrl = 'https://provinces.open-api.vn/api/?depth=3'; try { console.log("Fetching address data..."); const response = await fetch(apiUrl); if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`); addressData = await response.json(); console.log("Address data fetched successfully:", addressData.length, "cities"); renderCityOptions(addressData); } catch (error) { console.error('Error loading address data:', error); alert('Không thể tải dữ liệu địa chỉ. Vui lòng thử lại hoặc nhập thủ công.'); fallbackToTextInputs(); } }
+        function renderCityOptions(data) { if (!citySelect) return; citySelect.innerHTML = '<option value="">Chọn Tỉnh/Thành phố</option>'; data.sort((a, b) => a.name.localeCompare(b.name)); data.forEach(city => { const option = document.createElement('option'); option.value = city.code; option.textContent = city.name; citySelect.appendChild(option); }); resetSelect(districtSelect, 'Chọn Quận/Huyện'); resetSelect(wardSelect, 'Chọn Phường/Xã'); }
+        function renderDistrictOptions(cityCode) { if (!districtSelect) return; resetSelect(districtSelect, 'Chọn Quận/Huyện'); resetSelect(wardSelect, 'Chọn Phường/Xã'); const city = addressData.find(c => c.code == cityCode); if (city && city.districts) { city.districts.sort((a, b) => a.name.localeCompare(b.name)); city.districts.forEach(district => { const option = document.createElement('option'); option.value = district.code; option.textContent = district.name; districtSelect.appendChild(option); }); } else { console.log("No districts found for city code:", cityCode); } }
+        function renderWardOptions(cityCode, districtCode) { if (!wardSelect) return; resetSelect(wardSelect, 'Chọn Phường/Xã'); const city = addressData.find(c => c.code == cityCode); const district = city?.districts.find(d => d.code == districtCode); if (district && district.wards) { district.wards.sort((a, b) => a.name.localeCompare(b.name)); district.wards.forEach(ward => { const option = document.createElement('option'); option.value = ward.code; option.textContent = ward.name; wardSelect.appendChild(option); }); } else { console.log("No wards found for district code:", districtCode); } }
+        function resetSelect(selectElement, defaultOptionText) { if (selectElement) { selectElement.innerHTML = `<option value="">${defaultOptionText}</option>`; } }
+        if (citySelect) { citySelect.addEventListener('change', function() { renderDistrictOptions(this.value); }); }
+        if (districtSelect) { districtSelect.addEventListener('change', function() { const selectedCityCode = citySelect.value; renderWardOptions(selectedCityCode, this.value); }); }
+        function fallbackToTextInputs() { console.warn("Address dropdowns might not work correctly due to data loading failure."); }
+
+        // --- Form Submission Logic ---
+        async function handleOrderSubmit(event) { event.preventDefault(); const submitBtn = document.getElementById('submitOrder'); const originalBtnText = submitBtn.innerHTML; submitBtn.disabled = true; submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> ĐANG XỬ LÝ...'; const formData = new FormData(event.target); const name = formData.get('name'); const phone = formData.get('phone'); const cityText = citySelect.options[citySelect.selectedIndex]?.text || formData.get('city'); const districtText = districtSelect.options[districtSelect.selectedIndex]?.text || formData.get('district'); const wardText = wardSelect.options[wardSelect.selectedIndex]?.text || formData.get('ward'); const addressDetail = formData.get('addressDetail'); const note = formData.get('note') || ''; const date = formData.get('date'); const selectedProductInput = document.querySelector('input[name="product"]:checked'); const selectedProduct = selectedProductInput ? selectedProductInput.value : 'Không chọn sản phẩm'; const fullAddress = `${addressDetail}, ${wardText}, ${districtText}, ${cityText}`; const apiData = { date: date, name: name, phone: phone, address: fullAddress, don_hang: selectedProduct, Note: note }; const sheetDbUrl = 'https://sheetdb.io/api/v1/fg5880qtxha50'; try { const response = await fetch(sheetDbUrl, { method: 'POST', headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify({ data: [apiData] }) }); const result = await response.json(); if (response.ok && result.created) { const successMessage = document.getElementById('successMessage'); if (successMessage) { successMessage.classList.remove('hidden'); successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' }); } event.target.reset(); resetSelect(citySelect, 'Chọn Tỉnh/Thành phố'); resetSelect(districtSelect, 'Chọn Quận/Huyện'); resetSelect(wardSelect, 'Chọn Phường/Xã'); fetchAddressData(); } else { console.error('SheetDB Error:', result); alert(`Có lỗi xảy ra khi gửi đơn hàng: ${result.error || 'Vui lòng thử lại.'}`); } } catch (error) { console.error('Error submitting order:', error); alert('Không thể kết nối đến máy chủ đặt hàng. Vui lòng kiểm tra kết nối mạng và thử lại!'); } finally { submitBtn.disabled = false; submitBtn.innerHTML = originalBtnText; } }
+
+        // --- Initialization on DOMContentLoaded ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize sliders
+            showDetailSlide('book1', 0);
+            showDetailSlide('book2', 0);
+
+            // Set current date for form
+            const now = new Date();
+            const dateStr = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+            const orderDateInput = document.getElementById('orderDate');
+            if(orderDateInput) orderDateInput.value = dateStr;
+
+            // Fetch address data
+            fetchAddressData();
+
+            // Attach form submit listener
+            const orderForm = document.getElementById('orderForm');
+            if (orderForm) orderForm.addEventListener('submit', handleOrderSubmit);
+
+            // Start Countdown Timer (e.g., until midnight)
+            const countdownDisplay = document.getElementById('countdown-timer');
+            if (countdownDisplay) {
+                const now = new Date();
+                const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0); // Midnight tonight
+                const secondsUntilEndOfDay = Math.round((endOfDay.getTime() - now.getTime()) / 1000);
+                if (secondsUntilEndOfDay > 0) {
+                    startCountdown(secondsUntilEndOfDay, countdownDisplay);
+                } else {
+                     countdownDisplay.innerHTML = "<span class='text-custom-red'>KHUYẾN MÃI ĐÃ KẾT THÚC!</span>";
+                }
+            }
+
+             // Start Recent Order Popup Loop (show first after ~5s, then every ~15s)
+             setTimeout(showRecentOrderPopup, 5000); // Show first popup after 5 seconds
+             setInterval(showRecentOrderPopup, 15000 + Math.random() * 5000); // Show subsequent popups every 15-20 seconds
+
+        });
+    </script>
+</body>
+</html>
